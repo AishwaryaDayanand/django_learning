@@ -46,16 +46,16 @@ def registerUser(request):
     page = 'register'
     form  = UserCreationForm()
 
-    if request.method=='POST':
+    if request.method == 'POST':
+        print("requested")
         form = UserCreationForm(request.POST)
         if form.is_valid():
             print("requested")
-            user  = form.save(commit=False)
-            user.username = user.username.lower()
+            user  = form.save()
+            # user.username = user.username.lower()
             print("requested1")
-            user.save()
+            # user.save()
             print("requested2")
-
             messages.success(request,"User Registerd Successfully!")
             return redirect('login')
     context = {
