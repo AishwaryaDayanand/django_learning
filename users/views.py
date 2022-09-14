@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.shortcuts import render,redirect
 from .models import Profile
 from django.contrib.auth.models import User
@@ -48,15 +49,12 @@ def registerUser(request):
     form  = CustomUserCreationForm()
 
     if request.method == 'POST':
-        print("requested")
+        
         form = CustomUserCreationForm(request.POST)
-        if form.is_valid():
-            print("requested")
+        if form.is_valid():    
             user  = form.save()
             # user.username = user.username.lower()
-            print("requested1")
             # user.save()
-            print("requested2")
             messages.success(request,"User Registerd Successfully!")
             login(request,user)
             return redirect('profiles')
@@ -72,7 +70,12 @@ def registerUser(request):
 
 
 def profiles(request):
-    profiles = Profile.objects.all()
+    search_query = ''
+    
+    if request.GET.get('search_query'):
+        search_query = request.GET.get('search_query')
+    
+    profiles = Profile.objects.filter(name__icontains = search_query)
     context = {
         'profiles': profiles
     }
@@ -91,3 +94,13 @@ def userProfile(request, pk):
     return render(request, 'users/user-profile.html', context)
 
 
+
+@login_required(login_url='login')
+def UserAccount(request):
+    profile = request.user.profile
+    skills = profile.skill_set.all()
+    context = {
+        'profile': profile,
+        'skills': skills,
+    }
+    return render(request,'users/account.html',context)
