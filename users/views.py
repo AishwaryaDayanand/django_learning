@@ -61,7 +61,7 @@ def registerUser(request):
         
         else:
             messages.success(request,"An Error occured while creating user")
-
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
     context = {
         'page': page,
         'form' :form
@@ -94,10 +94,10 @@ def userProfile(request, pk):
     return render(request, 'users/user-profile.html', context)
 
 
-
 @login_required(login_url='login')
 def UserAccount(request):
     profile = request.user.profile
+    print(profile)
     skills = profile.skill_set.all()
     context = {
         'profile': profile,
